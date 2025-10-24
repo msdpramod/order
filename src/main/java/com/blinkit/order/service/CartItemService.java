@@ -56,6 +56,12 @@ public class CartItemService {
 
         return true;
     }
+    public boolean addToCartFallBack(String userId,
+                                     CartItemRequest request,
+                                     Exception exception) {
+        exception.printStackTrace();
+        return false;
+    }
 
     @Transactional
     public boolean removeFromCart(String userId, String productId) {

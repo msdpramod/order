@@ -3,6 +3,7 @@ package com.blinkit.order.controller;
 import com.blinkit.order.dtos.CartItemRequest;
 import com.blinkit.order.models.CartItem;
 import com.blinkit.order.service.CartItemService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -11,13 +12,14 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/cart")
+@RequiredArgsConstructor
 public class CartItemController {
 
     private final CartItemService cartItemService;
 
-    public CartItemController(CartItemService cartItemService) {
-        this.cartItemService = cartItemService;
-    }
+//   // public CartItemController(CartItemService cartItemService) {
+//        this.cartItemService = cartItemService;
+//    }
 
     @PostMapping
     public ResponseEntity<String> addToCart(
@@ -43,9 +45,9 @@ public class CartItemController {
         return ResponseEntity.status(HttpStatus.NO_CONTENT).body("Item removed successfully");
     }
 
-    @GetMapping("/items")
+    @GetMapping
     public ResponseEntity<List<CartItem>> getCartItems(
             @RequestHeader("X-User-ID") String userId) {
-        return ResponseEntity.ok(cartItemService.getCartItems(userId));
+        return  new ResponseEntity<>(cartItemService.getCartItems(userId), HttpStatus.OK);
     }
 }

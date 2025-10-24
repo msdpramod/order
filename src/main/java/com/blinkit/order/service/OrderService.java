@@ -7,6 +7,7 @@ import com.blinkit.order.models.Order;
 import com.blinkit.order.models.OrderItem;
 import com.blinkit.order.models.OrderStatus;
 import com.blinkit.order.repository.OrderRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -24,7 +25,7 @@ public class OrderService {
         this.cartItemService = cartItemService;
         this.orderRepository = orderRepository;
     }
-
+    @Transactional
     public OrderResponseDTO createOrder(String userId) {
         // Validate user and cart items
         List<CartItem> cartItems = cartItemService.getCartItems(userId);
