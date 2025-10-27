@@ -1,6 +1,8 @@
 package com.blinkit.order.service;
 
+import com.blinkit.order.client.ProductServiceClient;
 import com.blinkit.order.dtos.CartItemRequest;
+import com.blinkit.order.dtos.ProductResponseDTO;
 import com.blinkit.order.models.CartItem;
 import com.blinkit.order.repository.CartItemRepository;
 import jakarta.transaction.Transactional;
@@ -8,27 +10,28 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class CartItemService {
 
     private final CartItemRepository cartItemRepository;
+    private final ProductServiceClient productServiceClient;
 
 
-    public CartItemService(CartItemRepository cartItemRepository) {
+    public CartItemService(CartItemRepository cartItemRepository, ProductServiceClient productServiceClient) {
         this.cartItemRepository = cartItemRepository;
+        this.productServiceClient = productServiceClient;
     }
 
     @Transactional
     public boolean addToCart(String userId, CartItemRequest cartItemRequest) {
         // Check product
-//        Optional<Product> productOpt = productRepository.findById(cartItemRequest.getProductId());
-//        if (productOpt.isEmpty()) return false;
-//
-//        Product product = productOpt.get();
-//
+        ProductResponseDTO productResponseDTO = productServiceClient.getProductDetails(cartItemRequest.getProductId());
+        if (productResponseDTO==null) return false;
+
 //        // Check stock
-//        if (product.getStockQuantity() < cartItemRequest.getQuantity()) return false;
+        if (productResponseDTO.getStockQuantity() < cartItemRequest.getQuantity()) return false;
 //
 //        // Check user
 //        Optional<User> userOpt = userRepository.findById(Long.parseLong(id));
